@@ -8,6 +8,7 @@ import (
 )
 
 var img *ebiten.Image
+var memory int = 4096
 
 func init() {
 	var err error
@@ -27,10 +28,14 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	/*ebitenutil.DebugPrint(screen, "Hello, World!")*/
 	/*ebitenutil.DebugPrint(screen, "Hello World !")
 	ebitenutil.DebugPrintAt(screen, instruct.Opcode00E0(), 0, 11)*/
-	screen.DrawImage(img, nil)
+
 	/*
 		* clear the screen
-		instruct.Opcode00E0(img)
+		instruct.Opcode00E0(screen)
+	*/
+	/*
+		* draw sprite to screen (only aligned)
+		instruct.OpcodeDxyn(screen, img)
 	*/
 }
 

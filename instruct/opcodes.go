@@ -18,9 +18,10 @@ func OpcodeAnnn() {
 	/*  Load index register with immediate value */
 	fmt.Println("Load index register")
 }
-func OpcodeDxyn() {
+func OpcodeDxyn(screen *ebiten.Image, img *ebiten.Image) string {
 	/* Draw sprite to screen (only aligned) */
-	fmt.Println("Draw sprite")
+	screen.DrawImage(img, nil)
+	return "Draw sprite"
 }
 func Opcode1nnn() {
 	/* Jump (at the end) */
