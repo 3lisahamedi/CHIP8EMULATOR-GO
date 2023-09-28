@@ -1,14 +1,18 @@
 package main
 
 import (
+	"CHIP8emulator/instruct"
 	"fmt"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"log"
+	"time"
 )
 
 var img *ebiten.Image
-var memory int = 4096
+var array []byte
+
+type Game struct{}
 
 func init() {
 	var err error
@@ -17,8 +21,6 @@ func init() {
 		log.Fatal(err)
 	}
 }
-
-type Game struct{}
 
 func (g *Game) Update() error {
 	return nil
@@ -30,13 +32,38 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	ebitenutil.DebugPrintAt(screen, instruct.Opcode00E0(), 0, 11)*/
 
 	/*
-		* clear the screen
-		instruct.Opcode00E0(screen)
-	*/
+	* clear the screen
+
+	 */
 	/*
-		* draw sprite to screen (only aligned)
-		instruct.OpcodeDxyn(screen, img)
-	*/
+	* draw sprite to screen (only aligned)
+
+	 */
+	/*
+
+		instruct.Opcode6xnn()*/
+	/*	instruct.OpcodeDxyn(screen, img)
+	 */
+	time.Sleep(2 * time.Second)
+
+	instruct.OpcodeDxyn(screen, img)
+	fmt.Println("Drew image")
+
+	time.Sleep(2 * time.Second)
+
+	for _, val := range array {
+		for i := range instruct.Cpu.Memory {
+			instruct.Cpu.Memory[i] = val
+		}
+	}
+	for i := range instruct.Cpu.Memory {
+		instruct.Opcode(instruct.Cpu.Memory[i])
+		fmt.Println("Going through memory table")
+		s := fmt.Sprintf("%d is here", instruct.Cpu.Memory[i])
+		fmt.Println(s)
+	}
+	fmt.Println("Trying to clear")
+	fmt.Println("Done with clearing")
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
@@ -47,6 +74,8 @@ func main() {
 	ebiten.SetWindowSize(760, 385)
 	ebiten.SetWindowTitle("Hello, World!")
 
+	array, _ = instruct.ReadFileAndReturnByteArray("1-chip8-logo.ch8")
+
 	if err := ebiten.RunGame(&Game{}); err != nil {
 		log.Fatal(err)
 	}
@@ -55,5 +84,5 @@ func main() {
 		instruct.OpcodeAnnn()
 		instruct.OpcodeDxyn()
 		instruct.Opcode1nnn()*/
-	fmt.Println("Hello, World!")
+	fmt.Println("Goodbye, World!")
 }
