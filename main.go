@@ -7,9 +7,6 @@ import (
 	"log"
 )
 
-var img *ebiten.Image
-var array []byte
-
 type Game struct{}
 
 func init() {
@@ -20,6 +17,7 @@ func init() {
 }
 
 func (g *Game) Update() error {
+	instruct.Opcode(instruct.Cpu.Transferx200ToActualOpcodes())
 	return nil
 }
 
