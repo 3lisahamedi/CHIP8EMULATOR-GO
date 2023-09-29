@@ -5,7 +5,8 @@ import (
 )
 
 func Opcode(input uint16) { /* function that grabs the hexadecimal and associates it to corresponding cmd*/
-	fmt.Println("Success. Now going to read opcode.")
+	fmt.Println("Success. Now going to split opcode into 4 parts.")
+	splitOpcode(input)
 	/* Need a split function. */
 	/*op1 := byte(input>>12) & 0x000F*/
 
@@ -63,4 +64,40 @@ func Opcode(input uint16) { /* function that grabs the hexadecimal and associate
 	}
 
 	fmt.Println("Found no opcodes")*/
+}
+
+func splitOpcode(wholeOpcode uint16) {
+	/*Trying to isolate each digit*/
+	/*firstDigit := wholeOpcode >> 12 & 0xF000
+	secondDigit := wholeOpcode >> 8 & 0x0F00
+	thirdDigit := wholeOpcode >> 4 & 0x00F0
+	fourthDigit := wholeOpcode & 0x000F*/
+	/*Better version. Splits properly + into decimal notation we can switch case on later.*/
+	firstDigit := (wholeOpcode & 0xF000) >> 12
+	secondDigit := (wholeOpcode & 0x0F00) >> 8
+	thirdDigit := (wholeOpcode & 0x00F0) >> 4
+	fourthDigit := wholeOpcode & 0x000F
+
+	/*Any prints need to be in %02x because they are hexadecimals ( and that's how you print them apparently*/
+	fmt.Printf("so we have %02x \n", wholeOpcode)
+	fmt.Printf("which would give : %02x, as the firstDigit \n", firstDigit)
+	fmt.Printf("which would give : %02x, as the secondDigit \n", secondDigit)
+	fmt.Printf("which would give : %02x, as the thirdDigit \n", thirdDigit)
+	fmt.Printf("which would give : %02x, as the fourthDigit \n", fourthDigit)
+
+	switch firstDigit {
+	case 00:
+		switch secondDigit {
+		case 00:
+			switch thirdDigit {
+			case 0x0E:
+				switch fourthDigit {
+				case 00:
+					fmt.Println("Fell on the case 0x0E00. Congrats.")
+					break
+				}
+			}
+		}
+	}
+	fmt.Println("Didn't get it.")
 }
