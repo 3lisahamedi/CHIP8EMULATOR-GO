@@ -25,7 +25,7 @@ var Cpu Chip8
 
 func TransferROMToMemory(filePath string) {
 	/*offset = setting to a custom point, 0x200 because default start for CHIP-8 <- but not that exactly but go equivalent ( 0xc8 )*/
-	offset := 0xc8
+	offset := 0x200
 
 	dataFromROM, err := os.ReadFile(filePath)
 	if err != nil {
@@ -38,10 +38,12 @@ func TransferROMToMemory(filePath string) {
 
 	/*Debug loop to see in terminal all data*/
 	for i, val := range Cpu.memory {
-		sprintf := fmt.Sprintf("%v is current value, %v is current index", val, i)
-		fmt.Println(sprintf)
+		if i >= 512 && i <= 712 {
+			sprintf := fmt.Sprintf("%v is current value, %v is current index", val, i)
+			fmt.Println(sprintf)
+		}
 	}
-	Cpu.Pc = 0xc8 /*Initialising the counter here so starts at 0x200 placement later */
+	Cpu.Pc = 0x200 /*Initialising the counter here so starts at 512 decimal placement later */
 }
 
 func (Cpu *Chip8) Transferx200ToActualOpcodes() uint16 { /*Memory has data stored. Now we grab each data, TWO by TWO because data is cut up byte by byte */
@@ -49,6 +51,7 @@ func (Cpu *Chip8) Transferx200ToActualOpcodes() uint16 { /*Memory has data store
 	firstPart := Cpu.memory[Cpu.Pc]
 	Cpu.Pc += 1
 	secondPart := Cpu.memory[Cpu.Pc]
+	Cpu.Pc += 1
 
 	/*each two bytes make one opcode ( hexadecimal )*/
 	currentOpcode := Cpu.WholeOpcode(firstPart, secondPart)
