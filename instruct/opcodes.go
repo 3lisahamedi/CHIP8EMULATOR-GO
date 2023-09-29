@@ -11,7 +11,7 @@ func Opcode(input uint16) { /* function that grabs the hexadecimal and associate
 	/*op1 := byte(input>>12) & 0x000F*/
 
 	/*	switch op1 {
-	 */ /*0xx for the hexadecimal. Goes through first parts. */
+	 *//*0xx for the hexadecimal. Goes through first parts. */
 
 	/*case 0x0:
 		fmt.Println("Currently in case 0x0.")
@@ -96,8 +96,13 @@ func splitOpcode(wholeOpcode uint16) {
 					fmt.Println("Fell on the case 0x0E00. Congrats.")
 					break
 				}
+				break
 			}
+			break
 		}
+	default:
+		fmt.Println("Didn't get it.")
+		break
 	}
-	fmt.Println("Didn't get it.")
+
 }
