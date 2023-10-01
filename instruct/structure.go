@@ -8,17 +8,17 @@ import (
 
 // Chip8 represents CPU CHIP-8 structure
 type Chip8 struct {
-	memory     [4096]byte    // 4096 octets memory
-	registers  [16]byte      // 16 registers of 8 bits
-	index      uint16        // Adress register of 16 bits
-	Pc         uint16        // Program counter of 16 bits (commence a 0x200)
-	stack      [16]uint16    // Stack of 16 registers of 16 bits
-	sp         uint8         // Pointer of the stack
-	delayTimer byte          // Delay register of 8 bits
-	soundTimer byte          // Sound register of 8 bits
-	keypad     [16]byte      // 16 keys keyboard
-	screen     [64 * 32]byte // 64x32 pixels screen
-	clock      int           // 60Hz clock
+	memory     [4096]byte   // 4096 octets memory
+	registers  [16]byte     // 16 registers of 8 bits
+	index      uint16       // Adress register of 16 bits
+	Pc         uint16       // Program counter of 16 bits (commence a 0x200)
+	stack      [16]uint16   // Stack of 16 registers of 16 bits
+	sp         uint8        // Pointer of the stack
+	delayTimer byte         // Delay register of 8 bits
+	soundTimer byte         // Sound register of 8 bits
+	keypad     [16]byte     // 16 keys keyboard
+	Screen     [64][32]byte // 64x32 pixels screen
+	clock      int          // 60Hz clock
 }
 
 var Cpu Chip8

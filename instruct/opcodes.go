@@ -79,14 +79,14 @@ func splitOpcode(wholeOpcode uint16) {
 	fourthDigit := wholeOpcode & 0x000F
 
 	/*Any prints need to be in %02x because they are hexadecimals ( and that's how you print them apparently*/
-	fmt.Printf("so we have %02x \n", wholeOpcode)
+	/*fmt.Printf("so we have %02x \n", wholeOpcode)
 	fmt.Printf("which would give : %02x, as the firstDigit \n", firstDigit)
 	fmt.Printf("which would give : %02x, as the secondDigit \n", secondDigit)
 	fmt.Printf("which would give : %02x, as the thirdDigit \n", thirdDigit)
-	fmt.Printf("which would give : %02x, as the fourthDigit \n", fourthDigit)
+	fmt.Printf("which would give : %02x, as the fourthDigit \n", fourthDigit)*/
 
 	switch firstDigit {
-	case 00:
+	case 0x00:
 		switch secondDigit {
 		case 00:
 			switch thirdDigit {
@@ -94,12 +94,24 @@ func splitOpcode(wholeOpcode uint16) {
 				switch fourthDigit {
 				case 00:
 					fmt.Println("Fell on the case 0x0E00. Congrats.")
+
 					break
 				}
 				break
 			}
 			break
 		}
+	case 0x01:
+		fmt.Println("Fell on the case 1NNN. Congrats.")
+		break
+	case 0x06:
+		fmt.Println("Fell on the case 6XNN. Congrats.")
+		break
+	case 0x0A:
+		fmt.Println("Fell on the case ANNN. Congrats.")
+		break
+	case 0x0D:
+		fmt.Println("Fell on the case DXYN. Congrats.")
 	default:
 		fmt.Println("Didn't get it.")
 		break
