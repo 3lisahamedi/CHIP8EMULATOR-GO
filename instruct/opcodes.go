@@ -5,11 +5,11 @@ import (
 )
 
 type opcode struct {
-	x   byte
-	y   byte
-	n   byte
-	nn  byte
-	nnn byte
+	x   uint16
+	y   uint16
+	n   uint16
+	nn  uint16
+	nnn uint16
 }
 
 var recognisedOpcode opcode
@@ -21,7 +21,7 @@ func Opcode(input uint16) { /* function that grabs the hexadecimal and associate
 	/*op1 := byte(input>>12) & 0x000F*/
 
 	/*	switch op1 {
-	 *//*0xx for the hexadecimal. Goes through first parts. */
+	 */ /*0xx for the hexadecimal. Goes through first parts. */
 
 	/*case 0x0:
 		fmt.Println("Currently in case 0x0.")
@@ -121,9 +121,9 @@ func splitOpcode(wholeOpcode uint16) opcode {
 		fmt.Println("Fell on the case ANNN. Congrats.")
 		break
 	case 0x0D:
-		recognisedOpcode.x = byte(secondDigit)
-		recognisedOpcode.y = byte(thirdDigit)
-		recognisedOpcode.n = byte(fourthDigit)
+		recognisedOpcode.x = secondDigit
+		recognisedOpcode.y = thirdDigit
+		recognisedOpcode.n = fourthDigit
 		Cpu.opcodeDxyn(recognisedOpcode.x, recognisedOpcode.y, recognisedOpcode.n)
 		fmt.Println("Fell on the case DXYN. Congrats.")
 	default:
@@ -133,42 +133,52 @@ func splitOpcode(wholeOpcode uint16) opcode {
 	return opcode{}
 }
 
-func (cpu *Chip8) opcodeDxyn(x byte, y byte, n byte) {
-	/* Drawing sprite at x, y with a width of 8 bits ( 1 byte ) and a height of n byte */
-	/*0 et 1*/
-	cpu.screenModified = false
+func (cpu *Chip8) opcodeDxyn(x uint16, y uint16, n uint16) {
+	/*X, Y and N are 4-bit values -> hexadecimal, so uint16*/
 
-	/*We make a copy, so we can check against makeshift screen ( the register ) */
+	/* Drawing sprite at x, y with a width of 8 bits ( 1 byte ) and a height equivalent to n byte */
+	/*cpu.screenModified = false
+
+	/*We make a copy, so we can check against makeshift screen ( the register )
 	Vx := cpu.register[x]
 	Vy := cpu.register[y]
+	fmt.Printf("Vx : %v \n", Vx)
+	fmt.Printf("Vy : %v \n", Vy)
 
-	/*Never changes so no need for a loop on each*/
-	screenY := Vy % 32
+	/*Never changes so no need for a loop on each
 	var screenX byte
+	var screenY byte
 
-	/*Our collision flag*/
+	fmt.Printf("screenY : %v \n", screenY)
+	fmt.Printf("empty screenX : %v \n", screenX)
+	/*Our collision flag
 	cpu.register[0xF] = 0
-	/*initialise in advance*/
+	/*initialise in advance
 	bytecount := byte(0)
-	/*Get entire line that is supposed to be drawn in throught calculation + memory*/
-	entireLine := cpu.memory[cpu.index+uint16(bytecount)]
 
-	/*Height first according to n ( n is total height ), going line by line*/
-	for ; bytecount < entireLine; bytecount++ {
-		/*Width second according to default width ( 8 bits, so 8 ) */
-		for width := byte(0); width < 8; width++ {
-			/*Get actual X coordinate adapted to CHIP-8 screen. X is what moves for the animations, not y */
-			screenX = Vx % 64
+	/*Get entire line that is supposed to be drawn in throught calculation + memory
+	entireLine := cpu.memory[cpu.index+uint16(bytecount)]
+	fmt.Printf("entireLine : %v \n", entireLine)
+	/*Height first according to n ( n is total height ), going line by line
+	for ; n < entireLine; bytecount++ {
+		/*Width second according to default width ( 8 bits, so 8 )
+		fmt.Printf("bytecount : %v \n", bytecount)
+		for width := byte(0); width < 8; width++ { /*0 to 7 bits ( 8bits )*/
+	/*Get actual X coordinate adapted to CHIP-8 screen. X is what moves for the animations, not y
+			screenX = (Vx + width) % 64
+			screenY = (Vy + bytecount) % 32
+			fmt.Printf("final screenX : %v \n", screenX)
 		}
 	}
 
 	/*Actual turn on or off of the pixel*/
-	/*If already turned on*/
-	if cpu.Screen[screenX][screenY] == 1 {
+	/*If already turned on
+	if cpu.Screen[screenX][screenY] == 0 {
 		cpu.register[0xF] = 1
 	} else {
-		/*If not already. Turns it on*/
+		/*If not already. Turns it on
 		cpu.Screen[screenX][screenY] ^= 1
 	}
-	cpu.screenModified = true
+	fmt.Printf("Index : %v \n", cpu.index)
+	cpu.screenModified = true*/
 }
