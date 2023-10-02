@@ -9,6 +9,7 @@ import (
 )
 
 type Game struct {
+	cpu instruct.Chip8
 }
 
 func init() {
@@ -25,13 +26,12 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	var screenBool [64][32]bool
 	for Vx, width := range instruct.Cpu.Screen { /*ranges over the rows*/
-		for Vy := range width { /*ranges over the columns*/
-			if !screenBool[Vx][Vy] {
-				screen.Set(Vx, Vy, color.Color(color.RGBA{R: 153, G: 102, B: 1})) /*Sets main color*/
+		for Vy, screenBool := range width { /*ranges over the columns*/
+			if screenBool == 1 {
+				screen.Set(Vx, Vy, color.RGBA{R: 255, G: 204, B: 1}) /*Sets img color*/
 			} else {
-				screen.Set(Vx, Vy, color.Color(color.RGBA{R: 255, G: 204, B: 1})) /*Sets img color*/
+				screen.Set(Vx, Vy, color.RGBA{R: 153, G: 102, B: 1}) /*Sets main color*/
 			}
 		}
 	}
@@ -42,7 +42,7 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 }
 
 func main() {
-	ebiten.SetWindowSize(760, 385)
+	ebiten.SetWindowSize(640, 320)
 	ebiten.SetWindowTitle("Hello, World!")
 
 	instruct.TransferROMToMemory("1-chip8-logo.ch8")

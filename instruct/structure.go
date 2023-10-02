@@ -8,17 +8,18 @@ import (
 
 // Chip8 represents CPU CHIP-8 structure
 type Chip8 struct {
-	memory     [4096]byte   // 4096 octets memory
-	registers  [16]byte     // 16 registers of 8 bits
-	index      uint16       // Adress register of 16 bits
-	Pc         uint16       // Program counter of 16 bits (commence a 0x200)
-	stack      [16]uint16   // Stack of 16 registers of 16 bits
-	sp         uint8        // Pointer of the stack
-	delayTimer byte         // Delay register of 8 bits
-	soundTimer byte         // Sound register of 8 bits
-	keypad     [16]byte     // 16 keys keyboard
-	Screen     [64][32]byte // 64x32 pixels screen
-	clock      int          // 60Hz clock
+	memory         [4096]byte   // 4096 octets memory
+	register       [16]byte     // 16 registers of 8 bits
+	index          uint16       // Adress register of 16 bits
+	Pc             uint16       // Program counter of 16 bits (commence a 0x200)
+	stack          [16]uint16   // Stack of 16 registers of 16 bits
+	sp             uint8        // Pointer of the stack
+	delayTimer     byte         // Delay register of 8 bits
+	soundTimer     byte         // Sound register of 8 bits
+	keypad         [16]byte     // 16 keys keyboard
+	Screen         [64][32]byte // 64x32 pixels screen
+	screenModified bool
+	clock          int // 60Hz clock
 }
 
 var Cpu Chip8
@@ -60,8 +61,8 @@ func (Cpu *Chip8) Transferx200ToActualOpcodes() uint16 { /*Memory has data store
 }
 func (Cpu *Chip8) WholeOpcode(firstPart byte, secondPart byte) uint16 {
 	/* Side note : Converts 8bit to 16bits, 2 bytes to 1 hexadecimal, uint8 + uint8 to uint16*/
-	var opcode uint16
+	var wholeopcode uint16
 	/* We stick a bunch of 0s behind the first part, and the second part gets added with a | ( OR )*/
-	opcode = (uint16(firstPart) << 8) | uint16(secondPart)
-	return opcode
+	wholeopcode = (uint16(firstPart) << 8) | uint16(secondPart)
+	return wholeopcode
 }

@@ -4,6 +4,16 @@ import (
 	"fmt"
 )
 
+type opcode struct {
+	x   byte
+	y   byte
+	n   byte
+	nn  byte
+	nnn byte
+}
+
+var recognisedOpcode opcode
+
 func Opcode(input uint16) { /* function that grabs the hexadecimal and associates it to corresponding cmd*/
 	fmt.Println("Success. Now going to split opcode into 4 parts.")
 	splitOpcode(input)
@@ -66,7 +76,7 @@ func Opcode(input uint16) { /* function that grabs the hexadecimal and associate
 	fmt.Println("Found no opcodes")*/
 }
 
-func splitOpcode(wholeOpcode uint16) {
+func splitOpcode(wholeOpcode uint16) opcode {
 	/*Trying to isolate each digit*/
 	/*firstDigit := wholeOpcode >> 12 & 0xF000
 	secondDigit := wholeOpcode >> 8 & 0x0F00
@@ -111,10 +121,54 @@ func splitOpcode(wholeOpcode uint16) {
 		fmt.Println("Fell on the case ANNN. Congrats.")
 		break
 	case 0x0D:
+		recognisedOpcode.x = byte(secondDigit)
+		recognisedOpcode.y = byte(thirdDigit)
+		recognisedOpcode.n = byte(fourthDigit)
+		Cpu.opcodeDxyn(recognisedOpcode.x, recognisedOpcode.y, recognisedOpcode.n)
 		fmt.Println("Fell on the case DXYN. Congrats.")
 	default:
 		fmt.Println("Didn't get it.")
 		break
 	}
+	return opcode{}
+}
 
+func (cpu *Chip8) opcodeDxyn(x byte, y byte, n byte) {
+	/* Drawing sprite at x, y with a width of 8 bits ( 1 byte ) and a height of n byte */
+	/*0 et 1*/
+	cpu.screenModified = false
+
+	/*We make a copy, so we can check against makeshift screen ( the register ) */
+	Vx := cpu.register[x]
+	Vy := cpu.register[y]
+
+	/*Never changes so no need for a loop on each*/
+	screenY := Vy % 32
+	var screenX byte
+
+	/*Our collision flag*/
+	cpu.register[0xF] = 0
+	/*initialise in advance*/
+	bytecount := byte(0)
+	/*Get entire line that is supposed to be drawn in throught calculation + memory*/
+	entireLine := cpu.memory[cpu.index+uint16(bytecount)]
+
+	/*Height first according to n ( n is total height ), going line by line*/
+	for ; bytecount < entireLine; bytecount++ {
+		/*Width second according to default width ( 8 bits, so 8 ) */
+		for width := byte(0); width < 8; width++ {
+			/*Get actual X coordinate adapted to CHIP-8 screen. X is what moves for the animations, not y */
+			screenX = Vx % 64
+		}
+	}
+
+	/*Actual turn on or off of the pixel*/
+	/*If already turned on*/
+	if cpu.Screen[screenX][screenY] == 1 {
+		cpu.register[0xF] = 1
+	} else {
+		/*If not already. Turns it on*/
+		cpu.Screen[screenX][screenY] ^= 1
+	}
+	cpu.screenModified = true
 }
