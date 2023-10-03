@@ -10,7 +10,7 @@ import (
 type Chip8 struct {
 	memory         [4096]byte   // 4096 octets memory
 	register       [16]byte     // 16 registers of 8 bits
-	index          uint16       // Adress register of 16 bits
+	index          int          // Adress register of 16 bits
 	Pc             uint16       // Program counter of 16 bits (commence a 0x200)
 	stack          [16]uint16   // Stack of 16 registers of 16 bits
 	sp             uint8        // Pointer of the stack
