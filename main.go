@@ -42,7 +42,7 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 }
 
 func main() {
-	ebiten.SetWindowSize(640, 320)
+	ebiten.SetWindowSize(640, 320) /*64 x 32*/
 	ebiten.SetWindowTitle("Hello, World!")
 
 	instruct.TransferROMToMemory("1-chip8-logo.ch8")
