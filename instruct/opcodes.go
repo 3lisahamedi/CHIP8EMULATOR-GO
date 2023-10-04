@@ -5,70 +5,9 @@ import (
 	"math"
 )
 
-func Opcode(input uint16) { /* function that grabs the hexadecimal and associates it to corresponding cmd*/
-	fmt.Println("Success. Now going to split opcode into 4 parts.")
-	splitOpcode(input)
-	/* Need a split function. */
-	/*op1 := byte(input>>12) & 0x000F*/
-
-	/*	switch op1 {
-	 */ /*0xx for the hexadecimal. Goes through first parts. */
-
-	/*case 0x0:
-		fmt.Println("Currently in case 0x0.")
-		break
-	case 0x1:
-		fmt.Println("Currently in case 0x1.")
-		break
-	case 0x2:
-		fmt.Println("Currently in case 0x2.")
-		break
-	case 0x3:
-		fmt.Println("Currently in case 0x3.")
-		break
-	case 0x4:
-		fmt.Println("Currently in case 0x4.")
-		break
-	case 0x5:
-		fmt.Println("Currently in case 0x5.")
-		break
-	case 0x6:
-		fmt.Println("Currently in case 0x6.")
-		break
-	case 0x7:
-		fmt.Println("Currently in case 0x7.")
-		break
-	case 0x8:
-		fmt.Println("Currently in case 0x8.")
-		break
-	case 0x9:
-		fmt.Println("Currently in case 0x9.")
-		break
-	case 0xA:
-		fmt.Println("Currently in case 0xA.")
-		break
-	case 0xB:
-		fmt.Println("Currently in case 0xB.")
-		break
-	case 0xC:
-		fmt.Println("Currently in case 0xC.")
-		break
-	case 0xD:
-		fmt.Println("Currently in case 0xD.")
-		break
-	case 0xE:
-		fmt.Println("Currently in case 0xE.")
-		break
-	case 0xF:
-		fmt.Println("Currently in case 0xF.")
-		break
-	}
-
-	fmt.Println("Found no opcodes")*/
-}
-
-func splitOpcode(wholeOpcode uint16) {
-	/*Trying to isolate each digit*/
+func SplitOpcode(wholeOpcode uint16) { /*Function that deals and manipulates opcodes*/
+	/*	fmt.Println("Success. Now going to split opcode into 4 parts.")
+	 */ /*Trying to isolate each digit*/
 	/*Better version. Splits properly + into decimal notation we can switch case on later.*/
 	firstDigit := (wholeOpcode & 0xF000) >> 12
 	secondDigit := (wholeOpcode & 0x0F00) >> 8
@@ -129,45 +68,79 @@ func (cpu *Chip8) opcode00E0() {
 		}
 	}
 
-	fmt.Println("Cleared screen.")
+	/*	fmt.Println("Cleared screen.")
+	 */
 }
 
 func (cpu *Chip8) opcodeDxyn(x uint16, y uint16, n uint16) {
+	println("COMMENCEMENT : ", x, y, n)
 	/*X, Y and N are 4-bit values -> hexadecimal, so uint16*/
-	fmt.Printf(" le X : %02x \n", x)
-	fmt.Printf(" le Y : %02x \n", y)
+	/*	fmt.Printf(" le X : %02x \n", x)
+		fmt.Printf(" le Y : %02x \n", y)*/
 
 	/*x, y coordinates. Width 8bits by default, height of n bits*/
-	width := byte(1)
-	cpu.Screen[byte(x)+width][byte(y)+byte(n)] = 1
+	/*	width := byte(1)
+		for i := 0; uint16(i) < n; i++ {
+			cpu.Screen[byte(x)+width][y+uint16(i)] ^= 1
+		}*/
+	/* Drawing sprite at x, y with a width of 8 bits ( 1 byte ) and a height of n byte */
+	/*0 et 1*/
+	cpu.screenModified = false
+
+	/*We make a copy, so we can check against makeshift screen ( the register ) */
+	/*Never changes so no need for a loop on each*/
+	screenY := y % 32
+	var screenX byte
+
+	/*Our collision flag*/
+	cpu.register[0xF] = 0
+
+	/*Height first according to n ( n is total height ), going line by line*/
+	/*Get actual X coordinate adapted to CHIP-8 screen. X is what moves for the animations, not y */
+	for i := 0; uint16(i) <= n; i++ {
+		screenX = (byte(x) + byte(i)) % 64
+		/*If not already. Turns it on*/
+		cpu.Screen[screenY][screenX] ^= 1
+		println("counter : ", i)
+
+		/*Actual turn on or off of the pixel*/
+		/*If already turned on*/
+		cpu.screenModified = true
+	}
+	print("Current screen: \n")
+	fmt.Print(cpu.Screen)
 }
 
 func (cpu *Chip8) opcodeAnnn(n1 uint16, n2 uint16, n3 uint16) {
 	/*Three parts of a single value, NNN, that needs to be read as one*/
 	/*Conversion from hexadecimal to decimal + making sure it fits in memory ( % )*/
-	nnn := (int(n1)*int(math.Pow(16, 4)) + int(n2)*int(math.Pow(16, 2)) + int(n3)*int(math.Pow(16, 0))) % len(cpu.memory)
+	nnn := n1*uint16(math.Pow(16, 4)) + n2*uint16(math.Pow(16, 2)) + n3*uint16(math.Pow(16, 0))
 
 	/*Set I = nnn*/
-	cpu.index = nnn
+	cpu.I = nnn
 
-	if cpu.index == nnn {
-		fmt.Println("index called and matches")
+	if cpu.I == nnn {
+		/*		fmt.Println("index called and matches")
+		 */
 	}
 }
 
 func (cpu *Chip8) opcode6xnn(x uint16, n1 uint16, n2 uint16) {
 	Vx := cpu.register[x]
-	nn := int(n1)*int(math.Pow(16, 2)) + int(n2)*int(math.Pow(16, 0))%len(cpu.memory)
+	nn := int(n1)*int(math.Pow(16, 2)) + int(n2)*int(math.Pow(16, 0))%len(cpu.Memory)
 
 	/*Set Vx = nn*/
 	Vx = byte(nn)
 
 	if Vx == byte(nn) {
-		fmt.Println("register value called and matches")
+		/*		fmt.Println("register value called and matches")
+		 */
 	}
 }
 
 func (cpu *Chip8) opcode1nnn(n1 uint16, n2 uint16, n3 uint16) {
-	cpu.Pc = n1*uint16(math.Pow(16, 4)) + n2*uint16(math.Pow(16, 2)) + n3*uint16(math.Pow(16, 0))
-	fmt.Printf("Program counter : %02x \n", cpu.Pc)
+	/*Set Pc = nnn */
+	cpu.Pc = int(n1*uint16(math.Pow(16, 4)) + n2*uint16(math.Pow(16, 2)) + n3*uint16(math.Pow(16, 0)))
+	/*	fmt.Printf("Program counter : %02x \n", cpu.Pc)
+	 */
 }

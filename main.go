@@ -21,13 +21,16 @@ func init() {
 }
 
 func (g *Game) Update() error {
-	instruct.Opcode(instruct.Cpu.Transferx200ToActualOpcodes())
+	for i := 0; i < len(g.cpu.Memory)-1; i++ {
+		g.cpu.Opcode = instruct.Cpu.Transferx200ToActualOpcodes()
+		instruct.SplitOpcode(g.cpu.Opcode)
+	}
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	for Vx, width := range instruct.Cpu.Screen { /*ranges over the rows*/
-		for Vy, screenBool := range width { /*ranges over the columns*/
+	for Vy, width := range instruct.Cpu.Screen { /*ranges over the rows*/
+		for Vx, screenBool := range width { /*ranges over the columns*/
 			if screenBool == 1 {
 				screen.Set(Vx, Vy, color.RGBA{R: 255, G: 204, B: 1}) /*Sets img color*/
 			} else {
@@ -46,7 +49,6 @@ func main() {
 	ebiten.SetWindowTitle("Hello, World!")
 
 	instruct.TransferROMToMemory("1-chip8-logo.ch8")
-	instruct.Opcode(instruct.Cpu.Transferx200ToActualOpcodes())
 
 	if err := ebiten.RunGame(&Game{}); err != nil {
 		log.Fatal(err)
