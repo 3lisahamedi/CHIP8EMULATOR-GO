@@ -1,6 +1,7 @@
 package instruct
 
 import (
+	"fmt"
 	"log"
 	"os"
 )
@@ -40,12 +41,12 @@ func TransferROMToMemory(filePath string) {
 	fmt.Println("Checking data :")*/
 
 	/*Debug loop to see in terminal all data*/
-	/*	for i, val := range Cpu.Memory {
-		if i >= 512 && i <= 712 {*/
-	/*			sprintf := fmt.Sprintf("%v is current value, %v is current index", val, i)
-				fmt.Println(sprintf)*/
-	/*		}
-	}*/
+	for i, val := range Cpu.Memory {
+		if i >= 512 && i <= 712 {
+			sprintf := fmt.Sprintf("%v is current value, %v is current index", val, i)
+			fmt.Println(sprintf)
+		}
+	}
 	Cpu.Pc = 0x200 /*Initialising the counter here so starts at 512 decimal placement later */
 }
 
