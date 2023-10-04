@@ -59,7 +59,7 @@ func (cpu *Chip8) opcode00E0() {
 	}
 }
 
-func (cpu *Chip8) opcodeDxyn(x uint16, y uint16, n uint16) z {
+func (cpu *Chip8) opcodeDxyn(x uint16, y uint16, n uint16) {
 	println("COMMENCEMENT : ", x, y, n)
 
 	println("Vx : ", cpu.register[x]) /*Fueled in by previous opcodes ran previous to this one*/
