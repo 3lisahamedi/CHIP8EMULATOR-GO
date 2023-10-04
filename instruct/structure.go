@@ -1,7 +1,6 @@
 package instruct
 
 import (
-	"fmt"
 	"log"
 	"os"
 )
@@ -9,10 +8,10 @@ import (
 // Chip8 represents CPU CHIP-8 structure
 type Chip8 struct {
 	Memory   [4096]byte // 4096 octets memory
-	register [16]byte   // 16 registers of 8 bits
-	/*	index          int          // Adress register of 16 bits
-	 */I           uint16       // C'est le I
-	Pc             int          // Program counter of 16 bits (commence a 0x200)
+	register [16]byte   // 16 registers of 8 bits ( so one of 16 bytes )
+	/*index        int          // Adress register of 16 bits*/
+	I              uint16       // ONE register of 16bits ( so seeing it as a hexadecimal )
+	Pc             uint16       // Program counter of 16 bits (commence a 0x200)
 	stack          [16]uint16   // Stack of 16 registers of 16 bits
 	sp             uint8        // Pointer of the stack
 	delayTimer     byte         // Delay register of 8 bits
@@ -41,25 +40,26 @@ func TransferROMToMemory(filePath string) {
 	fmt.Println("Checking data :")*/
 
 	/*Debug loop to see in terminal all data*/
-	for i, val := range Cpu.Memory {
-		if i >= 512 && i <= 712 {
-			sprintf := fmt.Sprintf("%v is current value, %v is current index", val, i)
-			fmt.Println(sprintf)
-		}
-	}
+	/*	for i, val := range Cpu.Memory {
+		if i >= 512 && i <= 712 {*/
+	/*			sprintf := fmt.Sprintf("%v is current value, %v is current index", val, i)
+				fmt.Println(sprintf)*/
+	/*		}
+	}*/
 	Cpu.Pc = 0x200 /*Initialising the counter here so starts at 512 decimal placement later */
 }
 
 func (Cpu *Chip8) Transferx200ToActualOpcodes() uint16 { /*Memory has data stored. Now we grab each data, TWO by TWO because data is cut up byte by byte */
 	/*Program counter is used what is used for incrementation*/
 	var currentOpcode uint16
-	if Cpu.Pc <= 4096 {
+
+	if Cpu.Pc < 4096 {
 		firstPart := Cpu.Memory[Cpu.Pc]
 		/*	fmt.Printf("Program counter : %v \n", Cpu.Pc)
-		 */Cpu.Pc += 2
+		 */Cpu.Pc += 1
 		secondPart := Cpu.Memory[Cpu.Pc]
 		/*	fmt.Printf("Program counter : %v \n", Cpu.Pc)
-		 */Cpu.Pc += 2
+		 */Cpu.Pc += 1
 
 		/*each two bytes make one opcode ( hexadecimal )*/
 		currentOpcode = Cpu.WholeOpcode(firstPart, secondPart)
