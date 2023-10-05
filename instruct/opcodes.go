@@ -81,14 +81,10 @@ func (cpu *Chip8) opcodeDxyn(x uint16, y uint16, n uint16) {
 		println("cpu.I :", tempI)
 		println("Memory at cpu.I placement ( start data ) : ", cpu.Memory[tempI])
 		fmt.Printf("Binary  : %b ", cpu.Memory[tempI])
-		/*		println("Memory at n bytes placement ( end data ) : ", cpu.Memory[tempI+n])
-		 */
 		spriteData := uint16(cpu.Memory[tempI])
 		println("spriteData : ", spriteData)
-		for bit := uint16(0); bit < 8; bit++ {
-			/*			println("bit : ", bit)  is counting 8 bits.*/
+		for bit := uint16(8); bit > 0; bit-- {
 			isBitOne := (spriteData & (1 << bit)) != 0
-
 			println("bit : ", bit)
 			println("isBitOne : ", isBitOne)
 			if isBitOne {
@@ -96,24 +92,14 @@ func (cpu *Chip8) opcodeDxyn(x uint16, y uint16, n uint16) {
 				println("correct x ? : ", cpu.register[x])
 				println("screenY : ", screenY)
 				println("correct y ? :", cpu.register[y])
-				cpu.Screen[screenY][screenX] ^= 1
+				cpu.Screen[screenX][screenY] ^= 1
 				println("cpu.register[0xF] : ", cpu.register[0xF])
 			}
-			screenY += 1
+			screenX += 1
 		}
-		screenY = cpu.register[y]
-		screenX += 1
+		screenX = cpu.register[x]
+		screenY += 1
 		tempI += 1
-
-		/*screenX = (byte(x) + byte(i)) % 64
-		if cpu.Screen[screenY][screenX] != 1 {
-			cpu.Screen[screenY][screenX] ^= 1
-			cpu.register[0xF] = 0
-		} else {
-			cpu.register[0xF] = 1
-		}*/
-		/*println("counter : ", i)*/
-
 	}
 	print("Current screen: \n")
 	fmt.Print(cpu.Screen)
@@ -125,8 +111,8 @@ func (cpu *Chip8) opcodeAnnn(n1 uint16, n2 uint16, n3 uint16) {
 	fmt.Printf("COMMENCEMENT : %02x, %02x, %02x \n", n1, n2, n3)
 	nnn := int(float64(n1)*math.Pow(16, 2)) + int(n2*16) + int(n3)
 	/*Hexadecimal to decimal*/
-	/*	nnn := n1 * uint16(math.Pow(16, 2))
-	 */ /*Set I = nnn*/
+
+	/*Set I = nnn*/
 	cpu.I = uint16(nnn)
 
 	if cpu.I == uint16(nnn) {

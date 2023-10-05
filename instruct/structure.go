@@ -18,7 +18,7 @@ type Chip8 struct {
 	delayTimer     byte         // Delay register of 8 bits
 	soundTimer     byte         // Sound register of 8 bits
 	keypad         [16]byte     // 16 keys keyboard
-	Screen         [32][64]byte // 64x32 pixels screen
+	Screen         [64][32]byte // 64x32 pixels screen
 	screenModified bool
 	clock          int // 60Hz clock
 
@@ -28,15 +28,12 @@ type Chip8 struct {
 var Cpu Chip8
 
 func TransferROMToMemory(filePath string) {
-	/*offset = setting to a custom point, 0x200 because default start for CHIP-8 <- but not that exactly but go equivalent ( 0xc8 )*/
-	/*offset := 0x200*/
 
 	dataFromROM, err := os.ReadFile(filePath)
 	if err != nil {
 		log.Fatal(err)
 	}
-	/*From the offset point onwards, we are copying the data one by one*/
-	/*	copy(Cpu.Memory[offset:], dataFromROM)*/
+
 	for i := 0; i < len(dataFromROM); i++ {
 		Cpu.Memory[512+i] = dataFromROM[i]
 	}
@@ -50,7 +47,6 @@ func TransferROMToMemory(filePath string) {
 	}
 	Cpu.Pc = 0x200 /*Initialising the counter here so starts at 512 decimal placement later */
 }
-
 func (Cpu *Chip8) Transferx200ToActualOpcodes() uint16 { /*Memory has data stored. Now we grab each data, TWO by TWO because data is cut up byte by byte */
 	/*Program counter is used what is used for incrementation*/
 	var currentOpcode uint16

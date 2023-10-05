@@ -17,7 +17,6 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }
 
 func (g *Game) Update() error {
@@ -29,12 +28,12 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	for Vy, width := range instruct.Cpu.Screen { /*ranges over the rows*/
-		for Vx, screenBool := range width { /*ranges over the columns*/
-			if screenBool == 1 {
-				screen.Set(Vx, Vy, color.RGBA{R: 255, G: 204, B: 1}) /*Sets img color*/
+	for x, yAxis := range instruct.Cpu.Screen { /*ranges over the rows*/
+		for y, yValue := range yAxis { /*ranges over the columns*/
+			if yValue == 1 {
+				screen.Set(x, y, color.RGBA{R: 255, G: 204, B: 1}) /*Sets img color*/
 			} else {
-				screen.Set(Vx, Vy, color.RGBA{R: 153, G: 102, B: 1}) /*Sets main color*/
+				screen.Set(x, y, color.RGBA{R: 153, G: 102, B: 1}) /*Sets main color*/
 			}
 		}
 	}
