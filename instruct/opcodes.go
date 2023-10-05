@@ -2,11 +2,9 @@ package instruct
 
 import (
 	"fmt"
-	"math"
 )
 
 func SplitOpcode(wholeOpcode uint16) { /*Function that deals and manipulates opcodes*/
-	fmt.Printf("%x \n", wholeOpcode)
 	firstDigit := (wholeOpcode & 0xF000) >> 12
 	secondDigit := (wholeOpcode & 0x0F00) >> 8
 	thirdDigit := (wholeOpcode & 0x00F0) >> 4
@@ -41,7 +39,7 @@ func SplitOpcode(wholeOpcode uint16) { /*Function that deals and manipulates opc
 		break
 	case 0x0A:
 		fmt.Println("Fell on the case ANNN. Congrats.")
-		Cpu.opcodeAnnn(secondDigit, thirdDigit, fourthDigit)
+		Cpu.opcodeAnnn(wholeOpcode & 0x0FFF)
 		break
 	case 0x0D:
 		fmt.Println("Fell on the case DXYN. Congrats.")
@@ -62,39 +60,21 @@ func (cpu *Chip8) opcode00E0() {
 
 func (cpu *Chip8) opcodeDxyn(x uint16, y uint16, n uint16) {
 	println("COMMENCEMENT : ", x, y, n)
-
-	/*	println("Vx : ", cpu.register[x]) /*Fueled in by previous opcodes ran previous to this one
-		println("Vy : ", cpu.register[y]) /*Fueled in by previous opcodes ran previous to this one*/
-
 	var screenY = cpu.register[y]
 	var screenX = cpu.register[x]
-	/*	screenX = (byte(x) + byte(i)) % 64*/
 	var tempI = cpu.I
 
 	/*Our collision flag*/
 	cpu.register[0xF] = 0
 
 	for increasingHeight := uint16(0); increasingHeight < n; increasingHeight++ { /*Going from cpu.I to n bytes in memory */
-		/*		println("increasingHeight : ", increasingHeight)
-				println("cpu.I :", tempI)
-				println("Memory at cpu.I placement ( start data ) : ", cpu.Memory[tempI])
-				fmt.Printf("Binary  : %b ", cpu.Memory[tempI])*/
+
 		spriteData := uint16(cpu.Memory[tempI])
-		/*		println("spriteData : ", spriteData)
-		 */for bit := uint16(0); bit <= 8; bit++ {
-			/**/
+		for bit := uint16(0); bit <= 8; bit++ {
 			test := uint16(8) - bit
 			isBitOne := (spriteData & (1 << test)) != 0
-			/*		println("bit : ", bit)
-					println("isBitOne : ", isBitOne)*/
 			if isBitOne {
-				/*				println("screenX : ", screenX)
-								println("correct x ? : ", cpu.register[x])
-								println("screenY : ", screenY)
-								println("correct y ? :", cpu.register[y])*/
 				cpu.Screen[screenX][screenY] ^= 1
-				/*				println("cpu.register[0xF] : ", cpu.register[0xF])
-				 */
 			}
 			screenX += 1
 		}
@@ -102,23 +82,13 @@ func (cpu *Chip8) opcodeDxyn(x uint16, y uint16, n uint16) {
 		screenY += 1
 		tempI += 1
 	}
-	print("Current screen: \n")
-	fmt.Print(cpu.Screen)
-	fmt.Println()
 }
 
-func (cpu *Chip8) opcodeAnnn(n1 uint16, n2 uint16, n3 uint16) {
+func (cpu *Chip8) opcodeAnnn(nnn uint16) {
 	/*Three parts of a single value, NNN, that needs to be read as one*/
-	fmt.Printf("COMMENCEMENT : %02x, %02x, %02x \n", n1, n2, n3)
-	nnn := int(float64(n1)*math.Pow(16, 2)) + int(n2*16) + int(n3)
-	/*Hexadecimal to decimal*/
-
+	fmt.Printf("COMMENCEMENT : %02x \n", nnn)
 	/*Set I = nnn*/
-	cpu.I = uint16(nnn)
-
-	if cpu.I == uint16(nnn) {
-		println("At register I :", nnn) /*It's decimal and byte values are the same*/
-	}
+	cpu.I = nnn
 }
 
 func (cpu *Chip8) opcode6xnn(x uint16, n1 uint16, n2 uint16) {
@@ -134,7 +104,7 @@ func (cpu *Chip8) opcode6xnn(x uint16, n1 uint16, n2 uint16) {
 }
 
 func (cpu *Chip8) opcode1nnn(nnn uint16) {
-	fmt.Printf("COMMENCEMENT : %02x, %02x, %02x \n", nnn)
+	fmt.Printf("COMMENCEMENT : %02x \n", nnn)
 	/*Set Pc = nnn */
 	cpu.Pc = nnn - 2
 }
