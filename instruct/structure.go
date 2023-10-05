@@ -29,16 +29,17 @@ var Cpu Chip8
 
 func TransferROMToMemory(filePath string) {
 	/*offset = setting to a custom point, 0x200 because default start for CHIP-8 <- but not that exactly but go equivalent ( 0xc8 )*/
-	offset := 0x200
+	/*offset := 0x200*/
 
 	dataFromROM, err := os.ReadFile(filePath)
 	if err != nil {
 		log.Fatal(err)
 	}
 	/*From the offset point onwards, we are copying the data one by one*/
-	copy(Cpu.Memory[offset:], dataFromROM)
-	/*fmt.Println("Transfer complete.")
-	fmt.Println("Checking data :")*/
+	/*	copy(Cpu.Memory[offset:], dataFromROM)*/
+	for i := 0; i < len(dataFromROM); i++ {
+		Cpu.Memory[512+i] = dataFromROM[i]
+	}
 
 	/*Debug loop to see in terminal all data*/
 	for i, val := range Cpu.Memory {
