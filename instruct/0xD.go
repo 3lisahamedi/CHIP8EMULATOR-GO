@@ -1,7 +1,9 @@
 package instruct
 
+import "fmt"
+
 func (cpu *Chip8) opcodeDxyn(x uint16, y uint16, n uint16) {
-	println("COMMENCEMENT : ", x, y, n)
+	fmt.Printf("COMMENCEMENT : %02x, %02x, %02x \n", x, y, n)
 	var screenY = cpu.register[y]
 	var screenX = cpu.register[x]
 	var tempI = cpu.I

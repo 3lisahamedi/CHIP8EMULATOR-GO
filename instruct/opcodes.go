@@ -20,8 +20,12 @@ func SplitOpcode(wholeOpcode uint16) { /*Function that deals and manipulates opc
 			switch thirdDigit {
 			case 0x0E:
 				switch fourthDigit {
+				case 0x0E:
+					fmt.Println("Fell on the case 00EE. Congrats.")
+					Cpu.opcode00EE()
+					break
 				case 00:
-					fmt.Println("Fell on the case 0x0E00. Congrats.")
+					fmt.Println("Fell on the case 0E00. Congrats.")
 					Cpu.opcode00E0()
 					break
 				}
@@ -33,6 +37,14 @@ func SplitOpcode(wholeOpcode uint16) { /*Function that deals and manipulates opc
 		fmt.Println("Fell on the case 1NNN. Congrats.")
 		Cpu.opcode1nnn(wholeOpcode & 0x0FFF)
 		break
+	case 0x02:
+		fmt.Println("Fell on the case 2NNN. Congrats.")
+		Cpu.opcode2nnn(wholeOpcode & 0x0FFF)
+		break
+	case 0x03:
+		fmt.Println("Fell on the case 3XNN/ 3XKK. Congrats.")
+		Cpu.opcode3xnn(secondDigit, thirdDigit, fourthDigit)
+		break
 	case 0x06:
 		fmt.Println("Fell on the case 6XNN/ 6XKK. Congrats.")
 		Cpu.opcode6xnn(secondDigit, thirdDigit, fourthDigit)
@@ -40,6 +52,7 @@ func SplitOpcode(wholeOpcode uint16) { /*Function that deals and manipulates opc
 	case 0x07:
 		fmt.Println("Fell on the case 7XNN/ 7XKK. Congrats.")
 		Cpu.opcode7xnn(secondDigit, thirdDigit, fourthDigit)
+		break
 	case 0x0A:
 		fmt.Println("Fell on the case ANNN. Congrats.")
 		Cpu.opcodeAnnn(wholeOpcode & 0x0FFF)
@@ -47,6 +60,27 @@ func SplitOpcode(wholeOpcode uint16) { /*Function that deals and manipulates opc
 	case 0x0D:
 		fmt.Println("Fell on the case DXYN. Congrats.")
 		Cpu.opcodeDxyn(secondDigit, thirdDigit, fourthDigit)
+		break
+	case 0x0F:
+		switch thirdDigit {
+		case 0x01:
+			fmt.Println("Fell on the case FX1E. Congrats.")
+			Cpu.opcodeFx1E(secondDigit)
+			break
+		case 0x03:
+			fmt.Println("Fell on the case FX33. Congrats.")
+			Cpu.opcodeFx33(secondDigit)
+			break
+		case 0x05:
+			fmt.Println("Fell on the case FX55. Congrats.")
+			Cpu.opcodeFx55(secondDigit)
+			break
+		case 0x06:
+			fmt.Println("Fell on the case FX65. Congrats.")
+			Cpu.opcodeFx65(secondDigit)
+			break
+		}
+		break
 	default:
 		fmt.Println("Didn't get it.")
 		break
