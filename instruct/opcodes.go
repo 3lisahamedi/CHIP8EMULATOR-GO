@@ -11,6 +11,9 @@ func SplitOpcode(wholeOpcode uint16) { /*Function that deals and manipulates opc
 	thirdDigit := (wholeOpcode & 0x00F0) >> 4
 	fourthDigit := wholeOpcode & 0x000F
 
+	if firstDigit == uint16(0) && secondDigit == uint16(0) && thirdDigit == uint16(0) && fourthDigit == uint16(0) {
+		return
+	}
 	switch firstDigit {
 	case 0x00:
 		switch secondDigit {
@@ -90,11 +93,10 @@ func (cpu *Chip8) opcodeDxyn(x uint16, y uint16, n uint16) {
 				screenX = (uint16(cpu.register[x]) + increasingHeight) % 64
 				println("screenX : ", screenX)
 				println("correct x ? : ", cpu.register[x])
+				println("screenY : ", screenY)
+				println("correct y ? :", cpu.register[y])
 				if cpu.Screen[screenY][screenX] != 1 {
-					println("screenY : ", screenY)
-					println("correct y ? :", cpu.register[y])
-
-					cpu.Screen[screenY][screenX] ^= 1
+					cpu.Screen[screenY][screenX] = 1
 					cpu.register[0xF] = 0
 					println("cpu.register[0xF] : ", cpu.register[0xF])
 				} else {
