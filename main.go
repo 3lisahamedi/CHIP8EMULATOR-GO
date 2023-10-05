@@ -47,7 +47,7 @@ func main() {
 	ebiten.SetWindowSize(640, 320) /*64 x 32*/
 	ebiten.SetWindowTitle("Hello, World!")
 
-	instruct.TransferROMToMemory("1-chip8-logo.ch8")
+	instruct.TransferROMToMemory("2-ibm-logo.ch8")
 
 	if err := ebiten.RunGame(&Game{}); err != nil {
 		log.Fatal(err)
