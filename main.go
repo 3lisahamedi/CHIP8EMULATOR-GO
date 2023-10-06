@@ -6,6 +6,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"image/color"
 	"log"
+	"os"
 )
 
 type Game struct {
@@ -45,9 +46,9 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 
 func main() {
 	ebiten.SetWindowSize(640, 320) /*64 x 32*/
-	ebiten.SetWindowTitle("Hello, World!")
+	ebiten.SetWindowTitle("CHIP8emulator")
 
-	instruct.TransferROMToMemory("3-corax+.ch8")
+	instruct.TransferROMToMemory(os.Args[1])
 
 	if err := ebiten.RunGame(&Game{}); err != nil {
 		log.Fatal(err)

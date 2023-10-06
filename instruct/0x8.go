@@ -41,7 +41,9 @@ func (cpu *Chip8) opcode8xy4(x uint16, y uint16) {
 		cpu.register[0xF] = 0
 	}
 	/*Only takes the lowest 8 bits*/
-	cpu.register[x] = newVX & 0xFF
+	if x != 0xF {
+		cpu.register[x] = newVX & 0xFF
+	}
 }
 
 func (cpu *Chip8) opcode8xy5(x uint16, y uint16) {
@@ -55,7 +57,9 @@ func (cpu *Chip8) opcode8xy5(x uint16, y uint16) {
 		cpu.register[0xF] = 0
 	}
 	/*Order of subtraction is important so doing it clearer*/
-	cpu.register[x] = cpu.register[x] - cpu.register[y]
+	if x != 0xF {
+		cpu.register[x] -= cpu.register[y]
+	}
 }
 
 func (cpu *Chip8) opcode8xy6(x uint16, y uint16) {
@@ -67,7 +71,9 @@ func (cpu *Chip8) opcode8xy6(x uint16, y uint16) {
 	} else {
 		cpu.register[0xF] = 0
 	}
-	cpu.register[x] /= 2
+	if x != 0xF {
+		cpu.register[x] /= 2
+	}
 }
 
 func (cpu *Chip8) opcode8xy7(x uint16, y uint16) {
@@ -81,7 +87,9 @@ func (cpu *Chip8) opcode8xy7(x uint16, y uint16) {
 		cpu.register[0xF] = 0
 	}
 	/*Order of subtraction is important so doing it clearer*/
-	cpu.register[x] = cpu.register[y] - cpu.register[x]
+	if x != 0xF {
+		cpu.register[x] = cpu.register[y] - cpu.register[x]
+	}
 }
 
 func (cpu *Chip8) opcode8xyE(x uint16, y uint16) {
@@ -93,5 +101,7 @@ func (cpu *Chip8) opcode8xyE(x uint16, y uint16) {
 	} else {
 		cpu.register[0xF] = 0
 	}
-	cpu.register[x] *= 2
+	if x != 0xF {
+		cpu.register[x] *= 2
+	}
 }
