@@ -45,6 +45,14 @@ func SplitOpcode(wholeOpcode uint16) { /*Function that deals and manipulates opc
 		fmt.Println("Fell on the case 3XNN/ 3XKK. Congrats.")
 		Cpu.opcode3xnn(secondDigit, thirdDigit, fourthDigit)
 		break
+	case 0x04:
+		fmt.Println("Fell on the case 4XNN/ 4XKK. Congrats.")
+		Cpu.opcode4xnn(secondDigit, thirdDigit, fourthDigit)
+		break
+	case 0x05:
+		fmt.Println("Fell on the case 5XY0. Congrats.")
+		Cpu.opcode5xy0(secondDigit, thirdDigit)
+		break
 	case 0x06:
 		fmt.Println("Fell on the case 6XNN/ 6XKK. Congrats.")
 		Cpu.opcode6xnn(secondDigit, thirdDigit, fourthDigit)
@@ -52,6 +60,50 @@ func SplitOpcode(wholeOpcode uint16) { /*Function that deals and manipulates opc
 	case 0x07:
 		fmt.Println("Fell on the case 7XNN/ 7XKK. Congrats.")
 		Cpu.opcode7xnn(secondDigit, thirdDigit, fourthDigit)
+		break
+	case 0x08:
+		switch fourthDigit {
+		case 0x00:
+			fmt.Println("Fell on the case 8XY0. Congrats.")
+			Cpu.opcode8xy0(secondDigit, thirdDigit)
+			break
+		case 0x01:
+			fmt.Println("Fell on the case 8XY1. Congrats.")
+			Cpu.opcode8xy1(secondDigit, thirdDigit)
+			break
+		case 0x02:
+			fmt.Println("Fell on the case 8XY2. Congrats.")
+			Cpu.opcode8xy2(secondDigit, thirdDigit)
+			break
+		case 0x03:
+			fmt.Println("Fell on the case 8XY3. Congrats.")
+			Cpu.opcode8xy3(secondDigit, thirdDigit)
+			break
+		case 0x04:
+			fmt.Println("Fell on the case 8XY4. Congrats.")
+			Cpu.opcode8xy4(secondDigit, thirdDigit)
+			break
+		case 0x05:
+			fmt.Println("Fell on the case 8XY5. Congrats.")
+			Cpu.opcode8xy5(secondDigit, thirdDigit)
+			break
+		case 0x06:
+			fmt.Println("Fell on the case 8XY6. Congrats.")
+			Cpu.opcode8xy6(secondDigit, thirdDigit)
+			break
+		case 0x07:
+			fmt.Println("Fell on the case 8XY7. Congrats.")
+			Cpu.opcode8xy7(secondDigit, thirdDigit)
+			break
+		case 0x0E:
+			fmt.Println("Fell on the case 8XYE. Congrats.")
+			Cpu.opcode8xyE(secondDigit, thirdDigit)
+			break
+		}
+
+	case 0x09:
+		fmt.Println("Fell on the case 9XY0. Congrats.")
+		Cpu.opcode9xy0(secondDigit, thirdDigit)
 		break
 	case 0x0A:
 		fmt.Println("Fell on the case ANNN. Congrats.")

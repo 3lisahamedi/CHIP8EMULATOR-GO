@@ -12,13 +12,16 @@ func (cpu *Chip8) opcodeDxyn(x uint16, y uint16, n uint16) {
 	cpu.register[0xF] = 0
 
 	for increasingHeight := uint16(0); increasingHeight < n; increasingHeight++ { /*Going from cpu.I to n bytes in memory */
-
 		spriteData := uint16(cpu.Memory[tempI])
 		for bit := uint16(0); bit <= 8; bit++ {
 			test := uint16(8) - bit
 			isBitOne := (spriteData & (1 << test)) != 0
 			if isBitOne {
-				cpu.Screen[screenX][screenY] ^= 1
+				if cpu.Screen[screenX][screenY] == 1 {
+					cpu.register[0xF] = 1
+				} else {
+					cpu.Screen[screenX][screenY] ^= 1
+				}
 			}
 			screenX += 1
 		}

@@ -16,11 +16,10 @@ func (cpu *Chip8) opcodeFx55(x uint16) {
 	fmt.Printf("COMMENCEMENT : %02x \n", x)
 
 	/*Stores V0 to VX in memory starting at address I*/
-
-	for y := uint16(0); y < x+1; y++ {
-		cpu.Memory[cpu.I] = cpu.register[y]
-		cpu.I += 1
+	for i := uint16(0); i <= x; i++ {
+		cpu.Memory[cpu.I+i] = cpu.register[i]
 	}
+	cpu.I += x + 1
 }
 
 func (cpu *Chip8) opcodeFx33(x uint16) {
