@@ -34,7 +34,7 @@ func (cpu *Chip8) opcode8xy4(x uint16, y uint16) {
 	fmt.Printf("COMMENCEMENT : %02x, %02x \n", x, y)
 
 	/*Set Vx = Vx + Vy, set VF = carry*/
-	newVX := cpu.register[x] + cpu.register[y]
+	newVX := int16(cpu.register[x]) + int16(cpu.register[y])
 	if newVX > 255 {
 		cpu.register[0xF] = 1
 	} else {
@@ -42,23 +42,21 @@ func (cpu *Chip8) opcode8xy4(x uint16, y uint16) {
 	}
 	/*Only takes the lowest 8 bits*/
 	if x != 0xF {
-		cpu.register[x] = newVX & 0xFF
+		cpu.register[x] = byte(newVX & 0xFF)
 	}
 }
 
 func (cpu *Chip8) opcode8xy5(x uint16, y uint16) {
 	fmt.Printf("COMMENCEMENT : %02x, %02x \n", x, y)
-
 	/*Set Vx = Vx - Vy, set VF = NOT borrow*/
-	if cpu.register[x] > cpu.register[y] {
+	resultat := int16(cpu.register[x]) - int16(cpu.register[y])
+	if resultat >= 0 {
 		cpu.register[0xF] = 1
-		/*equal case is not taken into account ?*/
-	} else if cpu.register[x] < cpu.register[y] {
+	} else {
 		cpu.register[0xF] = 0
 	}
-	/*Order of subtraction is important so doing it clearer*/
 	if x != 0xF {
-		cpu.register[x] -= cpu.register[y]
+		cpu.register[x] = byte(resultat)
 	}
 }
 
@@ -78,17 +76,17 @@ func (cpu *Chip8) opcode8xy6(x uint16, y uint16) {
 
 func (cpu *Chip8) opcode8xy7(x uint16, y uint16) {
 	fmt.Printf("COMMENCEMENT : %02x, %02x \n", x, y)
-
 	/*Set Vx = Vy - Vx, set VF = NOT borrow*/
-	if cpu.register[y] > cpu.register[x] {
+	resultat := int16(cpu.register[y]) - int16(cpu.register[x])
+	if resultat >= 0 {
 		cpu.register[0xF] = 1
-		/*equal case is not taken into account ?*/
-	} else if cpu.register[y] < cpu.register[x] {
+	} else {
 		cpu.register[0xF] = 0
 	}
+
 	/*Order of subtraction is important so doing it clearer*/
 	if x != 0xF {
-		cpu.register[x] = cpu.register[y] - cpu.register[x]
+		cpu.register[x] = byte(resultat)
 	}
 }
 
