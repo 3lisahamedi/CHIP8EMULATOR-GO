@@ -10,7 +10,8 @@ func (cpu *Chip8) opcode00E0() {
 }
 
 func (cpu *Chip8) opcode00EE() {
+
 	/*Return from a subroutine*/
+	cpu.sp--
 	cpu.Pc = cpu.stack[cpu.sp]
-	cpu.sp -= 1
 }

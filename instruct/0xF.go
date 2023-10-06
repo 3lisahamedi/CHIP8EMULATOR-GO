@@ -27,13 +27,10 @@ func (cpu *Chip8) opcodeFx33(x uint16) {
 
 	/*Stores BCD representation of Vx in memory locations I, I+1, I+2*/
 	number := cpu.register[x]
-	fmt.Printf(" Original nb : %v \n", number)
+
 	V0 := number / 100
-	fmt.Printf(" V0 : %v \n", V0)
 	V1 := (number % 100) / 10
-	fmt.Printf(" V1 : %v \n", V1)
 	V2 := (number % 100) % 10
-	fmt.Printf(" V2 : %v \n", V2)
 
 	cpu.Memory[cpu.I] = V0
 	cpu.Memory[cpu.I+1] = V1
