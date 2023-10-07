@@ -24,6 +24,12 @@ func (g *Game) Update() error {
 	for i := 0; i < len(g.cpu.Memory)-1; i++ {
 		g.cpu.Opcode = instruct.Cpu.Transferx200ToActualOpcodes()
 		instruct.SplitOpcode(g.cpu.Opcode)
+
+		if ebiten.IsKeyPressed(ebiten.Key1) ||
+			ebiten.IsKeyPressed(ebiten.Key2) ||
+			ebiten.IsKeyPressed(ebiten.Key3) {
+			instruct.Cpu.OpcodeFx0A(g.cpu.Opcode)
+		}
 	}
 	return nil
 }

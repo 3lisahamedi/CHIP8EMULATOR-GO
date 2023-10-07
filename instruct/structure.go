@@ -11,16 +11,16 @@ type Chip8 struct {
 	Memory   [4096]byte // 4096 octets memory
 	register [16]byte   // 16 registers of 8 bits ( so one of 16 bytes )
 	/*index        int          // Adress register of 16 bits*/
-	I              uint16       // ONE register of 16bits ( so seeing it as a hexadecimal )
-	Pc             uint16       // Program counter of 16 bits (commence a 0x200)
-	stack          [16]uint16   // Stack of 16 registers of 16 bits
-	sp             uint8        // Pointer of the stack
-	delayTimer     byte         // Delay register of 8 bits
-	soundTimer     byte         // Sound register of 8 bits
-	keypad         [16]byte     // 16 keys keyboard
-	Screen         [64][32]byte // 64x32 pixels screen
-	screenModified bool
-	clock          int // 60Hz clock
+	I          uint16       // ONE register of 16bits ( so seeing it as a hexadecimal )
+	Pc         uint16       // Program counter of 16 bits (commence a 0x200)
+	stack      [16]uint16   // Stack of 16 registers of 16 bits
+	sp         uint8        // Pointer of the stack
+	DelayTimer byte         // Delay register of 8 bits
+	SoundTimer byte         // Sound register of 8 bits
+	Screen     [64][32]byte // 64x32 pixels screen
+	clock      int          // 60Hz clock
+	Inputflag  bool         // bool to detect input
+	Keys       [16]bool     // 16 keys keyboard
 
 	Opcode uint16
 }
