@@ -1,6 +1,8 @@
 package instruct
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func (cpu *Chip8) opcode2nnn(nnn uint16) {
 	fmt.Printf("COMMENCEMENT : %02x \n ", nnn)

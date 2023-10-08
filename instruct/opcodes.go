@@ -2,6 +2,7 @@ package instruct
 
 import (
 	"fmt"
+	"os"
 )
 
 func SplitOpcode(wholeOpcode uint16) { /*Function that deals and manipulates opcodes*/
@@ -100,7 +101,6 @@ func SplitOpcode(wholeOpcode uint16) { /*Function that deals and manipulates opc
 			Cpu.opcode8xyE(secondDigit, thirdDigit)
 			break
 		}
-
 	case 0x09:
 		fmt.Println("Fell on the case 9XY0. Congrats.")
 		Cpu.opcode9xy0(secondDigit, thirdDigit)
@@ -109,15 +109,35 @@ func SplitOpcode(wholeOpcode uint16) { /*Function that deals and manipulates opc
 		fmt.Println("Fell on the case ANNN. Congrats.")
 		Cpu.opcodeAnnn(wholeOpcode & 0x0FFF)
 		break
+	case 0x0B:
+		fmt.Println("Fell on the case BNNN. Congrats.")
+		os.Exit(333)
+		Cpu.opcodeBnnn(secondDigit)
+		break
+	case 0x0C:
+		fmt.Println("Fell on the case CXNN/CXKK. Congrats.")
+		Cpu.opcodeCxnn(secondDigit, thirdDigit, fourthDigit)
+		break
 	case 0x0D:
 		fmt.Println("Fell on the case DXYN. Congrats.")
 		Cpu.opcodeDxyn(secondDigit, thirdDigit, fourthDigit)
 		break
+	case 0x0E:
+		switch thirdDigit {
+		case 0x09:
+			fmt.Println("Fell on the case EX9E. Congrats.")
+			Cpu.opcodeEx9e(secondDigit)
+			break
+		case 0x0A:
+			fmt.Println("Fell on the case EXA1. Congrats.")
+			Cpu.opcodeExa1(secondDigit)
+			break
+		}
 	case 0x0F:
 		switch thirdDigit {
-		case 0x01:
-			fmt.Println("Fell on the case FX1E. Congrats.")
-			Cpu.opcodeFx1E(secondDigit)
+		case 0x02:
+			fmt.Println("Fell on the case FX29. Congrats.")
+			Cpu.opcodeFx29(secondDigit)
 			break
 		case 0x03:
 			fmt.Println("Fell on the case FX33. Congrats.")
@@ -132,7 +152,28 @@ func SplitOpcode(wholeOpcode uint16) { /*Function that deals and manipulates opc
 			Cpu.opcodeFx65(secondDigit)
 			break
 		}
-		break
+		switch fourthDigit {
+		case 0x05:
+			fmt.Println("Fell on the case FX15. Congrats.")
+			Cpu.opcodeFx15(secondDigit)
+			break
+		case 0x07:
+			fmt.Println("Fell on the case FX07. Congrats.")
+			Cpu.opcodeFx07(secondDigit)
+			break
+		case 0x0A:
+			fmt.Println("Fell on the case FX0A. Congrats.")
+			Cpu.OpcodeFx0A(secondDigit)
+			break
+		case 0x08:
+			fmt.Println("Fell on the case FX18. Congrats.")
+			Cpu.opcodeFx18(secondDigit)
+			break
+		case 0x0E:
+			fmt.Println("Fell on the case FX1E. Congrats.")
+			Cpu.opcodeFx1E(secondDigit)
+			break
+		}
 	default:
 		fmt.Println("Didn't get it.")
 		break

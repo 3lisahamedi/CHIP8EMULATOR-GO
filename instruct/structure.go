@@ -50,10 +50,12 @@ func TransferROMToMemory(filePath string) {
 func (Cpu *Chip8) Transferx200ToActualOpcodes() uint16 { /*Memory has data stored. Now we grab each data, TWO by TWO because data is cut up byte by byte */
 	/*Program counter is used what is used for incrementation*/
 	var currentOpcode uint16
+	var secondPart byte
+
 	Cpu.Pc += 2
 	if Cpu.Pc < 4096 {
 		firstPart := Cpu.Memory[Cpu.Pc]
-		secondPart := Cpu.Memory[Cpu.Pc+1]
+		secondPart = Cpu.Memory[Cpu.Pc+1]
 
 		/*each two bytes make one opcode ( hexadecimal )*/
 		currentOpcode = Cpu.WholeOpcode(firstPart, secondPart)
